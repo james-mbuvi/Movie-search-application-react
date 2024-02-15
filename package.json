@@ -1,7 +1,7 @@
 {
   "name": "movies-search",
   "private": true,
-  "homepage": "https://jamesmbuvi.github.io/movies-search",
+  "homepage": "https://james-mbuvi.github.io/movies-search",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
