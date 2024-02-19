@@ -1,69 +1,184 @@
-import React, {useState, useEffect } from "react";
-import 'bootstrap/dist/css/bootstrap-grid.css';
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { app } from "./firebase";
+import React, { useState } from "react";
+import { auth } from "./config";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth/web-extension";
 
+function Authntication({ onAuthenticated }) {
+    const [userCredential, setUserCredential] = useState({});
+    const [error, setError] = useState('');
+    const [loginType, setLoginType] = useState('login');
 
-function Authentication() {
-    const [user, setUser] = useState(null)
-    const provider = new GoogleAuthProvider();
-    const auth = getAuth(app);
-    
-
-    const signIn = () => {
-        signInWithPopup(auth, provider)
-        .then((result) => {
-            // // This gives you a Google Access Token. You can use it to access the Google API.
-            // const credential = GoogleAuthProvider.credentialFromResult(result);
-            // const token = credential.accessToken;
-            // // The signed-in user info.
-            const user = result.user;
-
-            console.log("user >>>", user);
-            setUser(user)
-         
-            // IdP data available using getAdditionalUserInfo(result)
-            // ...
-        }).catch((error) => {
-            // Handle Errors here.
-            const errorCode = error.code;
-            
-        });
+    function handleCredentials(e) {
+        setError('');
+        setUserCredential({ ...userCredential, [e.target.name]: e.target.value });
     }
 
-    useEffect(() => {
-    
+    function handleSignUp(e) {
+        e.preventDefault();
+        const { email, password } = userCredential;
 
-    }, []); 
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                onAuthenticated();
+            })
+            .catch((error) => {
+                setError(error.message);
+            });
+    }
+
+    function handleLogin(e) {
+        e.preventDefault();
+        const { email, password } = userCredential;
+
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                onAuthenticated();
+            })
+            .catch((error) => {
+                setError(error.message);
+            });
+    }
+
+    function handlePasswordReset() {
+        const email = prompt('Please enter your email');
+        sendPasswordResetEmail(auth, email);
+        alert('Email sent! Check your inbox to reset your password.');
+    }
 
     return (
-    <div className="card text-center">
-  <div className="card-header">
-    Sign Up
-  </div>
-  <div className="card-body">
-    <h5 className="card-title">Sign Up</h5>
-    <p className="card-text">Sign up with Google</p>
-    <button onClick={signIn} type="button" className="btn btn-outline-success">Google</button>
+        <>
+            <div className="container">
+                <div className="row">
+                    <div className="col">
+                        <p className="text-center mb-4">To continue, create an account or login to an existing account.</p>
 
-    {
-        user && <div>
+                        <div className="text-center mb-4">
+                            <button type="button" className="btn btn-secondary me-2" onClick={() => setLoginType('login')}>Login</button>
+                            <button type="button" className="btn btn-secondary" onClick={() => setLoginType('signup')}>Signup</button>
+                        </div>
 
-            <h6>{user.displayName}</h6>
-            <img src={user.photoURL} alt="user" />
-            <h5>hello {user.displayName} welcome</h5>
-        </div>
-    }
+                        <p className="text-start">Email</p>
+                        <div className="form-floating mb-3">
+                            <input onChange={(e) => handleCredentials(e)} type="email" className="form-control" id="floatingInput" placeholder="name@example.com" name="email" />
+                            <label htmlFor="floatingInput">Email address</label>
+                        </div>
 
-  </div>
-  <div className="card-footer text-body-secondary">
-   
-  </div>
-</div>
+                        <p className="text-start">Password</p>
+                        <div className="form-floating mb-3">
+                            <input onChange={(e) => handleCredentials(e)} type="password" className="form-control" id="floatingPassword" placeholder="Password" name="password" />
+                            <label htmlFor="floatingPassword">Password</label>
+                        </div>
+
+                        {loginType === 'login' ? (
+                            <button onClick={(e) => handleLogin(e)} className="btn btn-primary" type="button">Login</button>
+                        ) : (
+                            <button onClick={(e) => handleSignUp(e)} className="btn btn-primary" type="button">Signup</button>
+                        )}
+
+                    </div>
+                </div>
+            </div>
+
+            {error && 
+                <div className="error">
+                    {error}
+                </div>
+            }
+
+            <p onClick={handlePasswordReset}><a className="link-offset-2 link-underline link-underline-opacity-0" href="#">Forgot Password?</a></p>
+        </>
     );
 }
 
-export default Authentication;
+export default Authntication;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
