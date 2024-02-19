@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import App from './App';
 
-// Mocking the child components
+
 jest.mock('./components/SearchMovie', () => () => <div data-testid="search-movie" />);
 jest.mock('./components/MovieResult', () => () => <div data-testid="movie-result" />);
 jest.mock('./Authntification', () => ({ onAuthenticated }) => <button onClick={onAuthenticated}>Mock Auth Button</button>);
@@ -25,5 +25,5 @@ describe('App component', () => {
     expect(themeSwitch.checked).toBe(true);
   });
 
-  // Add more tests here to cover other functionalities of the App component
+  
 });
