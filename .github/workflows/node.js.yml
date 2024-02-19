@@ -14,7 +14,6 @@
 #     strategy:
 #       matrix:
 #         node-version: [16.x]
-#         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
 #     steps:
 #     - uses: actions/checkout@v3
@@ -26,166 +25,14 @@
 #     - run: npm ci
 #     - run: npm run build --if-present
 #     - run: npm test 
-
-
-#      - name: Deploy with gh-pages
-#     run: |
-#       git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-#       npm run deploy -- -u "github-actions-bot <support+actions@github.com>"
-#     env:
-#       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# name: Node.js CI
-
-# on:
-#   push:
-#     branches: [ "master" ]
-#   pull_request:
-#     branches: [ "master" ]
-
-# jobs:
-#   build:
-
-#     runs-on: ubuntu-latest
-
-#     strategy:
-#       matrix:
-#         node-version: [16.x]
-
-#     steps:
-#       - uses: actions/checkout@v3
-#       - name: Use Node.js ${{ matrix.node-version }}
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: ${{ matrix.node-version }}
-#           cache: 'npm'
-#       - run: npm ci
-#       - run: npm run build --if-present
-#       - run: npm test 
-
-#       - name: Deploy with gh-pages
-#         run: |
-#           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-#           npm install gh-pages
-#           npx gh-pages -d build -b master -m "Deployed using GitHub Actions"
-#           if [ $? -ne 0 ]; then
-#             echo "Deployment failed"
-#             exit 1
-#           fi
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# name: Deploy to GitHub Pages
-
-# on:
-#   push:
-#     branches:
-#       - main
-
-# jobs:
-#   build-and-deploy:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v2
-
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v2
-#         with:
-#           node-version: '16'
-#           cache: 'npm'
-
-#       - name: Install dependencies
-#         run: npm ci
-
-#       - name: Build
-#         run: npm run build
-
-#       - name: Deploy to GitHub Pages
-#         run: npm run deploy
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#     - name: Deploy with gh-pages
+#       run: |
+#         git config --global user.email "github-actions-bot@users.noreply.github.com"
+#         git config --global user.name "github-actions-bot"
+#         npm install gh-pages
+#         npx gh-pages -d build -b <gh-pages> -u "github-actions-bot <support+actions@github.com>"
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
 
@@ -265,7 +112,8 @@ jobs:
         git config --global user.email "github-actions-bot@users.noreply.github.com"
         git config --global user.name "github-actions-bot"
         npm install gh-pages
-        npx gh-pages -d build -b <gh-pages> -u "github-actions-bot <support+actions@github.com>"
+        npx gh-pages -d build -b gh-pages -u "github-actions-bot <support+actions@github.com>"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
